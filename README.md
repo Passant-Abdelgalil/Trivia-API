@@ -74,13 +74,13 @@ python test_flaskr.py
 
 Errors are returned as JSON objects:
 - Sample: curl http://127.0.0.1:5000/nonsense
-  ```
-  {
-      "success": False,
-      "error": 404,
-      "message": "Not Found"
-  }
-  ```
+```
+{
+  "success": False,
+  "error": 404,
+  "message": "Not Found"
+}
+```
   returned error codes:
   - 400: Bad Request
   - 404: Not Found
@@ -128,7 +128,6 @@ Errors are returned as JSON objects:
     - Creates a new question using the submitted question value, answer, difficulty, and category.
     - Reutrns success value, questions list paginated based on the page number, the inserted question, and total number of questions
 - **Sample**: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"quesiton":"What is the name of the application?", "answer":"Trivia", "difficulty":1, "category":1}'`
-<br>
 
 ```
   {
@@ -167,27 +166,27 @@ Errors are returned as JSON objects:
     - Deleted the question with the gived ID if exists
     - Returns success value, the deleted question id, the number of tital questions, and questions list paginated based on the current page number.
 - **Sample**: `curl -X DELETE http://127.0.0.1:5000/questions/5`
- <br>
+
 ```
-{
-    "success": True,
-    "deleted": 5,
-    "questions":[
-            {
-                "question": "Who discovered pencillin?",
-                "answer": "Alexander Fleming",
-                "category": 1,
-                "difficulty": 3 
-            },
-            {
-                "question": "La Giaconda is better known as what?",
-                "answer": "Mona Lisa",
-                "category": 2,
-                "difficulty": 3
-            },  .....
-        ],
-    "total_questions": 10
-}
+    {
+        "success": True,
+        "deleted": 5,
+        "questions":[
+                {
+                    "question": "Who discovered pencillin?",
+                    "answer": "Alexander Fleming",
+                    "category": 1,
+                    "difficulty": 3 
+                },
+                {
+                    "question": "La Giaconda is better known as what?",
+                    "answer": "Mona Lisa",
+                    "category": 2,
+                    "difficulty": 3
+                },  .....
+            ],
+        "total_questions": 10
+    }
 ```
 
 ### POST /questions/search
@@ -195,26 +194,26 @@ Errors are returned as JSON objects:
     -   search for questions that contain the given search term
     -   Returns success value, number of total questions,current category, and questions list that contains the given search term paginated baased on current page number.
 - **Sample**: `curl http://127.0.0.1:5000/questions/search -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'`
-<br>
+
 ```
-{
-    "success":True,
-    "questions":[
-        {
-            "quesiton": "Whose autobigraphy is entitled 'I Know Why the Caged Bird Sings'?",
-            "answer": "Maya Angelou",
-            "category": "History",
-            "difficulty": 2
-        },
-        {
-            "quesiton": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?",
-            "answer": "Edward Scissorhands",
-            "category": "History",
-            "difficulty": 3
-        }
-    ],
-    "total_questions": 10
-}
+    {
+        "success":True,
+        "questions":[
+            {
+                "quesiton": "Whose autobigraphy is entitled 'I Know Why the Caged Bird Sings'?",
+                "answer": "Maya Angelou",
+                "category": "History",
+                "difficulty": 2
+            },
+            {
+                "quesiton": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?",
+                "answer": "Edward Scissorhands",
+                "category": "History",
+                "difficulty": 3
+            }
+        ],
+        "total_questions": 10
+    }
 ```
 
 ### GET /categories/1/questions
@@ -223,7 +222,7 @@ Errors are returned as JSON objects:
       - Returns success value, total number of questions, current category, and list of the retrieved questions within this category
       - The questions are paginated based on the current page number
 - **Sample**: `curl http://127.0.0.1:5000/categories/4/questions`
-<br>
+
 ```
     {
         "success": True, 
@@ -251,7 +250,7 @@ Errors are returned as JSON objects:
 - **Genreal**:
     - Returns a random questions within the submitted category and that is not in the submitted list of previous questions
 - **Sample**: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"quiz_category":"Science", "previous_questions":[]}'`
-- <br>
+
 ```
     {
         "success": True,

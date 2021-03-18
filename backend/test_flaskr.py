@@ -18,9 +18,10 @@ class TriviaTestCase(unittest.TestCase):
         password = "postgres"
         username = 'postgres'
         url = 'localhost:5432'
-        self.database_path = "postgresql://{}:{}@{}/{}".format(username,password,url, self.database_name)
+        self.database_path = "postgresql://{}:{}@{}/{}".format(
+            username, password, url, self.database_name)
         setup_db(self.app, self.database_path)
-        
+
         self.question = "What is your name?"
         self.answer = "passant"
         self.category = 1
@@ -31,14 +32,14 @@ class TriviaTestCase(unittest.TestCase):
             "answer": "passant",
             "difficulty": 1,
             "category": 1
-            }
+        }
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-    
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -47,6 +48,7 @@ class TriviaTestCase(unittest.TestCase):
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
+
     def test_get_categories(self):
         '''
         This function test the success of retrieving all questions paginated based on the current page number
@@ -75,7 +77,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions']))
         self.assertTrue(len(data['categories']))
         self.assertTrue(data['total_questions'])
-        # check the format of the retrieved questions 
+        # check the format of the retrieved questions
         self.assertTrue(data['questions'][0]['question'])
         self.assertTrue(data['questions'][0]['answer'])
         self.assertTrue(data['questions'][0]['difficulty'])
@@ -125,7 +127,7 @@ class TriviaTestCase(unittest.TestCase):
         '''
         # 1) Case: valid data
         # post request to add the question
-        res = self.client().post("/questions", json = self.new_question)
+        res = self.client().post("/questions", json=self.new_question)
         data = json.loads(res.data)
         # check the success of the request
         self.assertEqual(res.status_code, 200)
@@ -135,16 +137,17 @@ class TriviaTestCase(unittest.TestCase):
         # check the values of the validity of the inserted question
         self.assertEqual(data['inserted_question']['question'], self.question)
         self.assertEqual(data['inserted_question']['answer'], self.answer)
-        self.assertEqual(data['inserted_question']['difficulty'], self.difficulty)
+        self.assertEqual(data['inserted_question']
+                         ['difficulty'], self.difficulty)
         self.assertEqual(data['inserted_question']['category'], self.category)
-        # check the question was inserted correctly in the database 
-        inserted_question = Question.query.order_by(self.db.desc(Question.id)).first().format()
+        # check the question was inserted correctly in the database
+        inserted_question = Question.query.order_by(
+            self.db.desc(Question.id)).first().format()
         self.assertTrue(inserted_question)
         self.assertEqual(inserted_question['answer'], self.answer)
         self.assertEqual(inserted_question['question'], self.question)
         self.assertEqual(inserted_question['difficulty'], self.difficulty)
         self.assertEqual(inserted_question['category'], self.category)
-
 
     def test_add_corrupted_question(self):
         '''
@@ -176,7 +179,7 @@ class TriviaTestCase(unittest.TestCase):
         self.new_question['question'] = self.question
         self.new_question['answer'] = ""
 
-        res = self.client().post(route, json = self.new_question)
+        res = self.client().post(route, json=self.new_question)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -191,7 +194,7 @@ class TriviaTestCase(unittest.TestCase):
         self.new_question['answer'] = self.answer
         self.new_question['category'] = None
 
-        res = self.client().post(route, json = self.new_question)
+        res = self.client().post(route, json=self.new_question)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -203,8 +206,7 @@ class TriviaTestCase(unittest.TestCase):
         self.new_question['category'] = self.category
         self.new_question['difficulty'] = None
 
-
-        res = self.client().post(route, json = self.new_question)
+        res = self.client().post(route, json=self.new_question)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -213,8 +215,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], error_message)
 
         self.new_question['difficulty'] = self.difficulty
-
-
 
     def test_delete_question(self):
         '''
@@ -229,19 +229,20 @@ class TriviaTestCase(unittest.TestCase):
         '''
         res = self.client().delete("/questions/5")
         data = json.loads(res.data)
-        deleted_question = Question.query.filter(Question.id ==5).one_or_none()
+        deleted_question = Question.query.filter(
+            Question.id == 5).one_or_none()
         # check the success of the request
         self.assertTrue(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'],5)
+        self.assertEqual(data['deleted'], 5)
         self.assertTrue(len(data['questions']))
         self.assertTrue(data['total_questions'])
-        # check the format of the retrieved questions 
+        # check the format of the retrieved questions
         self.assertTrue(data['questions'][0]['question'])
         self.assertTrue(data['questions'][0]['answer'])
         self.assertTrue(data['questions'][0]['difficulty'])
         self.assertTrue(data['questions'][0]['category'])
-        # check the success of deletion from the database 
+        # check the success of deletion from the database
         self.assertFalse(deleted_question)
 
     def test_422_delete_unavailable_question(self):
@@ -266,13 +267,13 @@ class TriviaTestCase(unittest.TestCase):
         - success value
         - total number of questions
         '''
-        res = self.client().post("/questions/search", json = {"searchTerm":"title"})
+        res = self.client().post("/questions/search",
+                                 json={"searchTerm": "title"})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
-
 
     def test_get_category_questions(self):
         '''
@@ -320,8 +321,9 @@ class TriviaTestCase(unittest.TestCase):
         - current category
         - total number of questions
         '''
-        previous_questions = [1,2]
-        res = self.client().post("/quizzes", json={"quiz_category": 1, "previous_questions":previous_questions})
+        previous_questions = [1, 2]
+        res = self.client().post(
+            "/quizzes", json={"quiz_category": 1, "previous_questions": previous_questions})
         data = json.loads(res.data)
 
         # check the success of the request
@@ -343,7 +345,8 @@ class TriviaTestCase(unittest.TestCase):
         - error status code
         - error message
         '''
-        res = self.client().post("/quizzes", json={"quiz_category": "nonsense", "previous_questions":[]})
+        res = self.client().post(
+            "/quizzes", json={"quiz_category": "nonsense", "previous_questions": []})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -351,9 +354,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Not Found")
 
-
-       
-       
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

@@ -265,6 +265,7 @@ class TriviaTestCase(unittest.TestCase):
         This function test the success of searching a question based on the given searchTerm
         Assuers:
         - success value
+        - returned list of questions
         - total number of questions
         '''
         res = self.client().post("/questions/search",
@@ -273,6 +274,24 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['questions']))
+        self.assertTrue(data['total_questions'])
+        
+    def test_search_question_with_nonsense_searchTerm(self):
+        '''
+        This function test the success of searching a question with a searchTerm that doesn't exist
+        Assuers:
+        - success value
+        - empty list of returned questions
+        - total number of questions
+        '''
+        res = self.client().post("/questions/search",
+                                 json={"searchTerm": "dfsghj"})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(len(data['questions']),0)
         self.assertTrue(data['total_questions'])
 
     def test_get_category_questions(self):

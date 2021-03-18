@@ -6,6 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flaskr import create_app
 from models import setup_db, Question, Category
 
+def pagination( data, per_page=10):
+    page = 1
+    start = (page - 1) * per_page
+    end = start + per_page
+    items = [item.format() for item in data]
+    return items[start:end]
+
 
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
@@ -43,6 +50,7 @@ class TriviaTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after reach test"""
         pass
+
 
     """
     TODO
@@ -271,10 +279,12 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post("/questions/search",
                                  json={"searchTerm": "title"})
         data = json.loads(res.data)
-
+        questions = Question.query.filter(
+                Question.question.ilike('%title%')).all()
+        questions = pagination(questions)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(len(data['questions']))
+        self.assertEqual(len(data['questions']), len(questions))
         self.assertTrue(data['total_questions'])
         
     def test_search_question_with_nonsense_searchTerm(self):

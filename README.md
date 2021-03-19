@@ -56,6 +56,7 @@ This is the API for Udacity Trivia App, that is responsilbe for:
 don't forget to open `test_flaskr.py` and change the **username** and **password** to meet yours!
 
 ![DB setup](imgs/database_setup.png)
+
 To run the tests, run
 ```
 dropdb trivia_test

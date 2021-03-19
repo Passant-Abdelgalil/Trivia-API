@@ -1,9 +1,9 @@
 # Trivia API
 This is the API for Udacity Trivia App, that is responsilbe for:
--  Display questions - both all questions and by category.
+-  Display questions - can be all questions or by category.
 -  Delete questions.
 -  Add questions.
--  Search for questions based on a text query string.
+-  Search for questions based on a text query string (case insensitive).
 -  Play the quiz game, randomizing either all questions or within a specific category.
 
 ### Screenshots
@@ -136,7 +136,7 @@ Errors are returned as JSON objects:
             {
                 "question": "What is the name of the application?",
                 "answer": "Trivia",
-                "category": 4
+                "category": 1,
                 "difficulty": 1
             },
             {
@@ -155,7 +155,7 @@ Errors are returned as JSON objects:
     "inserted_question": {
             "question": "What is the name of the application?",
             "answer": "Trivia",
-            "category": 4
+            "category": 1,
             "difficulty": 1
         },
     "total_questions": 11
@@ -248,7 +248,7 @@ Errors are returned as JSON objects:
 ### GET /quizzes
 
 - **Genreal**:
-    - Returns a random questions within the submitted category and that is not in the submitted list of previous questions
+    - Returns a random question within the submitted category which is not in the submitted list of previous questions
 - **Sample**: `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"quiz_category":"Science", "previous_questions":[]}'`
 
 ```

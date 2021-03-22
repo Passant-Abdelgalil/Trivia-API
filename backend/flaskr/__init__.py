@@ -5,7 +5,7 @@ from flask_cors import CORS
 import random
 from werkzeug.exceptions import HTTPException
 from models import setup_db, Question, Category, db
-
+import sys
 QUESTIONS_PER_PAGE = 10
 
 
@@ -237,15 +237,16 @@ def create_app(test_config=None):
                                                   Question.id.notin_(previous_questions)).all()
 
             if len(questions) == 0:  # if the category is not available
-                abort(404)
-
-            question = random.choice(questions).format()
+                question = Question("","",None, None).format()
+            else:
+                question = random.choice(questions).format()
             if question:
                 return jsonify({
                     "success": True,
                     "question": question
                 })
         except Exception:
+            print(sys.exc_info())
             abort(404)
 
     @app.errorhandler(HTTPException)

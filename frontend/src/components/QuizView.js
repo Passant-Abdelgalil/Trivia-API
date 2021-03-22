@@ -66,7 +66,7 @@ class QuizView extends Component {
           previousQuestions: previousQuestions,
           currentQuestion: result.question,
           guess: '',
-          forceEnd: result.question ? false : true
+          forceEnd: result.question['question']=="" ? true : false
         })
         return;
       },
@@ -131,9 +131,10 @@ class QuizView extends Component {
   }
 
   evaluateAnswer = () => {
-    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
-    const answerArray = this.state.currentQuestion.answer.toLowerCase().split(' ');
-    return answerArray.includes(formatGuess)
+    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase().replace(" ", "");
+    const answerArray = this.state.currentQuestion.answer.toLowerCase().replace(" ", "");
+
+    return answerArray===formatGuess?true:false;
   }
 
   renderCorrectAnswer(){
